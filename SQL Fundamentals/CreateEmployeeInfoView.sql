@@ -1,15 +1,15 @@
 ﻿-- Создание представления EmployeeInfo
 CREATE VIEW EmployeeInfo AS
 SELECT
-    Employee.Id AS EmployeeId,
-    COALESCE(Employee.EmployeeName, CONCAT(Person.FirstName, ' ', Person.LastName)) AS EmployeeFullName,
-    CONCAT(Address.ZipCode, '_', Address.State, ', ', Address.City, '-', Address.Street) AS EmployeeFullAddress,
-    CONCAT(Company.Name, '(', Employee.Position, ')') AS EmployeeCompanyInfo
+    Employees.Id AS EmployeeId,
+    COALESCE(Employees.EmployeeName, CONCAT(Persons.FirstName, ' ', Persons.LastName)) AS EmployeeFullName,
+    CONCAT(Addresses.ZipCode, '_', Addresses.State, ', ', Addresses.City, '-', Addresses.Street) AS EmployeeFullAddress,
+    CONCAT(Companies.Name, '(', Employees.Position, ')') AS EmployeeCompanyInfo
 FROM
-    Employee
-    INNER JOIN Person ON Employee.PersonId = Person.Id
-    INNER JOIN Address ON Employee.AddressId = Address.Id
-    INNER JOIN Company ON Employee.CompanyName = Company.Name
+    Employees
+    INNER JOIN Persons ON Employees.PersonId = Persons.Id
+    INNER JOIN Addresses ON Employees.AddressId = Addresses.Id
+    INNER JOIN Companies ON Employees.CompanyName = Companies.Name
 ORDER BY
-    Company.Name ASC,
-    Address.City ASC;
+    Companies.Name ASC,
+    Addresses.City ASC;

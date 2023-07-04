@@ -1,6 +1,6 @@
-﻿-- Создание триггера для таблицы Employee при вставке новой строки
+﻿-- Создание триггера для таблицы Employees при вставке новой строки
 CREATE TRIGGER CreateCompanyOnEmployeeInsert
-ON Employee
+ON Employees
 AFTER INSERT
 AS
 BEGIN
@@ -16,14 +16,14 @@ BEGIN
         -- Создание новой компании с тем же адресом
         DECLARE @NewCompanyId INT
 
-        INSERT INTO Company (Name, AddressId)
+        INSERT INTO Companies (Name, AddressId)
         SELECT @CompanyName, @AddressId
-        WHERE NOT EXISTS (SELECT 1 FROM Company WHERE AddressId = @AddressId)
+        WHERE NOT EXISTS (SELECT 1 FROM Companies WHERE AddressId = @AddressId)
 
         SET @NewCompanyId = SCOPE_IDENTITY()
 
         -- Обновление CompanyId вставленного сотрудника новым CompanyId
-        UPDATE Employee
+        UPDATE Employees
         SET CompanyId = @NewCompanyId
         WHERE Id = @EmployeeId
     END

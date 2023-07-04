@@ -20,9 +20,23 @@ BEGIN
     -- Обрезание значения поля CompanyName, если длина превышает 20 символов
     SET @CompanyName = LEFT(@CompanyName, 20);
 
-    -- Вставка данных в таблицу Employee
-    INSERT INTO Employee (AddressId, PersonId, CompanyName, Position, EmployeeName)
-    VALUES ((SELECT Id FROM Address WHERE Street = @Street),
-            (SELECT Id FROM Person WHERE (FirstName = @FirstName OR FirstName IS NULL) AND (LastName = @LastName OR LastName IS NULL)),
-            @CompanyName, @Position, @EmployeeName);
+    -- Вставка данных в таблицу Persons
+    DECLARE @PersonId INT;
+
+    INSERT INTO Persons (FirstName, LastName)
+    VALUES (@FirstName, @LastName);
+
+    SET @PersonId = SCOPE_IDENTITY();
+
+    -- Вставка данных в таблицу Addresses
+    DECLARE @AddressId INT;
+
+    INSERT INTO Addresses (Street, City, State, ZipCode)
+    VALUES (@Street, @City, @State, @ZipCode);
+
+    SET @AddressId = SCOPE_IDENTITY();
+
+    -- Вставка данных в таблицу Employees
+    INSERT INTO Employees (AddressId, PersonId, CompanyName, Position, EmployeeName)
+    VALUES (@AddressId, @PersonId, @CompanyName, @Position, @EmployeeName);
 END;
